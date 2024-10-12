@@ -1,0 +1,299 @@
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js';
+import { Pie, Line } from 'react-chartjs-2';
+import { Cog, DollarSign, PieChart, Lightbulb, Calendar } from 'lucide-react';
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title);
+
+// Componente principal
+export default function FinanceApp() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('gastos');
+  const [theme, setTheme] = useState('light');
+  const [customColor, setCustomColor] = useState('#3B82F6');
+  const [salary, setSalary] = useState(0);
+  const [expenses, setExpenses] = useState([]);
+  const [aiTips, setAiTips] = useState([]);
+  const [routines, setRoutines] = useState([]);
+
+  useEffect(() => {
+    // Simula o carregamento inicial
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    // Carrega dados do localStorage
+    const savedSalary = localStorage.getItem('salary');
+    const savedExpenses = localStorage.getItem('expenses');
+    const savedTheme = localStorage.getItem('theme');
+    const savedColor = localStorage.getItem('customColor');
+    const savedRoutines = localStorage.getItem('routines');
+
+    if (savedSalary) setSalary(parseFloat(savedSalary));
+    if (savedExpenses) setExpenses(JSON.parse(savedExpenses));
+    if (savedTheme) setTheme(savedTheme);
+    if (savedColor) setCustomColor(savedColor);
+    if (savedRoutines) setRoutines(JSON.parse(savedRoutines));
+
+    // Gera dicas de IA simuladas
+    setAiTips(generateAITips());
+  }, []);
+
+  useEffect(() => {
+    // Salva dados no localStorage quando mudam
+    localStorage.setItem('salary', salary.toString());
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    localStorage.setItem('theme', theme);
+    localStorage.setItem('customColor', customColor);
+    localStorage.setItem('routines', JSON.stringify(routines));
+  }, [salary, expenses, theme, customColor, routines]);
+
+  const addExpense = (description, amount) => {
+    setExpenses([...expenses, { description, amount: parseFloat(amount) }]);
+  };
+
+  const calculateTotal = () => {
+    return expenses.reduce((total, expense) => total + expense.amount, 0);
+  };
+
+  const generateAITips = () => {
+    // Simula dicas geradas por IA
+    return [
+      "Crie um orçamento mensal e siga-o rigorosamente.",
+      "Considere investir em um fundo de emergência.",
+      "Procure por ofertas e descontos antes de fazer compras.",
+      "Reduza gastos com refeições fora de casa cozinhando mais em casa.",
+      "Analise suas assinaturas e cancele as que não usa frequentemente."
+    ];
+  };
+
+  const addRoutine = (title, description) => {
+    setRoutines([...routines, { title, description }]);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-blue-500">
+        <img src="/placeholder.svg?height=100&width=100" alt="Logo" className="animate-pulse" />
+      </div>
+    );
+  }
+
+  return (
+    <Router>
+      <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
+        <nav className="bg-blue-600 p-4">
+          <ul className="flex justify-around">
+            <li>
+              <Link to="/" className="text-white hover:text-gray-200">
+                <DollarSign className="inline-block mr-1" /> Gastos
+              </Link>
+            </li>
+            <li>
+              <Link to="/graficos" className="text-white hover:text-gray-200">
+                <PieChart className="inline-block mr-1" /> Gráficos
+              </Link>
+            </li>
+            <li>
+              <Link to="/dicas" className="text-white hover:text-gray-200">
+                <Lightbulb className="inline-block mr-1" /> Dicas
+              </Link>
+            </li>
+            <li>
+              <Link to="/rotinas" className="text-white hover:text-gray-200">
+                <Calendar className="inline-block mr-1" /> Rotinas
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <main className="container mx-auto mt-8 p-4">
+          <Routes>
+            <Route path="/" element={
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Gerenciar Gastos</h2>
+                <div className="mb-4">
+                  <label className="block mb-2">Salário Mensal:</label>
+                  <input
+                    type="number"
+                    value={salary}
+                    onChange={(e) => setSalary(parseFloat(e.target.value))}
+                    className="border p-2 rounded w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <h3 className="text-xl font-bold mb-2">Adicionar Gasto</h3>
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    const description = e.target.description.value;
+                    const amount = e.target.amount.value;
+                    if (description && amount) {
+                      addExpense(description, amount);
+                      e.target.reset();
+                    }
+                  }}>
+                    <input
+                      type="text"
+                      name="description"
+                      placeholder="Descrição"
+                      className="border p-2 rounded w-full mb-2"
+                      required
+                    />
+                    <input
+                      type="number"
+                      name="amount"
+                      placeholder="Valor"
+                      className="border p-2 rounded w-full mb-2"
+                      required
+                    />
+                    <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
+                      Adicionar Gasto
+                    </button>
+                  </form>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Lista de Gastos</h3>
+                  <ul>
+                    {expenses.map((expense, index) => (
+                      <li key={index} className="mb-2">
+                        {expense.description}: R$ {expense.amount.toFixed(2)}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 font-bold">
+                    Total de Gastos: R$ {calculateTotal().toFixed(2)}
+                  </p>
+                  <p className="mt-2 font-bold">
+                    Saldo: R$ {(salary - calculateTotal()).toFixed(2)}
+                  </p>
+                </div>
+              </div>
+            } />
+            <Route path="/graficos" element={
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Gráficos</h2>
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold mb-2">Distribuição de Gastos</h3>
+                  <Pie
+                    data={{
+                      labels: expenses.map(expense => expense.description),
+                      datasets: [{
+                        data: expenses.map(expense => expense.amount),
+                        backgroundColor: [
+                          '#FF6384',
+                          '#36A2EB',
+                          '#FFCE56',
+                          '#4BC0C0',
+                          '#9966FF',
+                          '#FF9F40'
+                        ]
+                      }]
+                    }}
+                  />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Evolução de Gastos</h3>
+                  <Line
+                    data={{
+                      labels: expenses.map((_, index) => `Gasto ${index + 1}`),
+                      datasets: [{
+                        label: 'Valor do Gasto',
+                        data: expenses.map(expense => expense.amount),
+                        borderColor: customColor,
+                        tension: 0.1
+                      }]
+                    }}
+                    options={{
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            } />
+            <Route path="/dicas" element={
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Dicas de Economia</h2>
+                <ul>
+                  {aiTips.map((tip, index) => (
+                    <li key={index} className="mb-2 p-2 bg-gray-200 rounded">
+                      {tip}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            } />
+            <Route path="/rotinas" element={
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Rotinas Financeiras</h2>
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  const title = e.target.title.value;
+                  const description = e.target.description.value;
+                  if (title && description) {
+                    addRoutine(title, description);
+                    e.target.reset();
+                  }
+                }} className="mb-4">
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Título da Rotina"
+                    className="border p-2 rounded w-full mb-2"
+                    required
+                  />
+                  <textarea
+                    name="description"
+                    placeholder="Descrição da Rotina"
+                    className="border p-2 rounded w-full mb-2"
+                    required
+                  ></textarea>
+                  <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
+                    Adicionar Rotina
+                  </button>
+                </form>
+                <ul>
+                  {routines.map((routine, index) => (
+                    <li key={index} className="mb-2 p-2 bg-gray-200 rounded">
+                      <h3 className="font-bold">{routine.title}</h3>
+                      <p>{routine.description}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            } />
+          </Routes>
+        </main>
+
+        <footer className="bg-blue-600 p-4 mt-8">
+          <div className="flex justify-between items-center">
+            <div>
+              <label className="text-white mr-2">Tema:</label>
+              <select
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+                className="border p-1 rounded"
+              >
+                <option value="light">Claro</option>
+                <option value="dark">Escuro</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-white mr-2">Cor Personalizada:</label>
+              <input
+                type="color"
+                value={customColor}
+                onChange={(e) => setCustomColor(e.target.value)}
+                className="border p-1 rounded"
+              />
+            </div>
+          </div>
+        </footer>
+      </div>
+    </Router>
+  );
+}
