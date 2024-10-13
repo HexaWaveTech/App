@@ -1,160 +1,374 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicialização Profissional</title>
+    <meta name="description" content="Exemplo de uso de todas as tags HTML5">
+    <meta name="keywords" content="HTML, Tags, Exemplo">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Exemplo com todas as tags HTML5</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+        /* Estilos globais */
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+}
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #000000;
-            font-family: 'Roboto', sans-serif;
-            overflow: hidden;
-        }
-        .loader-container {
-            text-align: center;
-            position: relative;
-        }
-        .loader {
-            width: 150px;
-            height: 150px;
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            display: inline-block;
-            position: relative;
-            box-sizing: border-box;
-            animation: rotation 2s linear infinite;
-        }
-        .loader::after {
-            content: '';  
-            box-sizing: border-box;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-bottom-color: #ffffff;
-        }
-        @keyframes rotation {
-            0% { transform: rotate(0deg) }
-            100% { transform: rotate(360deg) }
-        }
-        .app-name {
-            color: white;
-            font-size: 28px;
-            font-weight: 700;
-            margin-top: 20px;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out forwards;
-        }
-        .loading-text {
-            color: #cccccc;
-            font-size: 18px;
-            font-weight: 300;
-            margin-top: 15px;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out 0.5s forwards;
-        }
-        .progress-bar {
-            width: 200px;
-            height: 4px;
-            background-color: #333333;
-            margin: 20px auto 0;
-            position: relative;
-            overflow: hidden;
-        }
-        .progress {
-            width: 0;
-            height: 100%;
-            background-color: #ffffff;
-            position: absolute;
-            left: 0;
-            top: 0;
-            transition: width 0.5s ease-out;
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+a {
+    color: #1e90ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para listas */
+ul, ol {
+    margin: 20px 0;
+    padding-left: 40px;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+/* Estilos de formatação de texto */
+p {
+    margin-bottom: 15px;
+}
+
+blockquote {
+    font-style: italic;
+    margin-left: 20px;
+    border-left: 3px solid #ccc;
+    padding-left: 10px;
+}
+
+cite {
+    display: block;
+    text-align: right;
+    font-style: italic;
+}
+
+mark {
+    background-color: yellow;
+}
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+hr {
+    margin: 20px 0;
+    border: 1px solid #ccc;
+}
+
+/* Estilos para código */
+code {
+    background-color: #eee;
+    padding: 2px 4px;
+    font-family: monospace;
+}
+
+pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ddd;
+    overflow-x: auto;
+}
+
+/* Estilos de imagens e figuras */
+img {
+    display: block;
+    margin-bottom: 15px;
+}
+
+figure {
+    margin: 0;
+    text-align: center;
+}
+
+figcaption {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Estilos para áudio e vídeo */
+audio, video {
+    display: block;
+    margin: 20px 0;
+}
+
+/* Estilos para formulários */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="email"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    margin-right: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Estilos para fieldset e legend */
+fieldset {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+legend {
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+/* Estilos para tabelas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+caption {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+tfoot {
+    background-color: #f9f9f9;
+}
+
+/* Estilos para navegação e header */
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+}
+
+/* Estilos para rodapé */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    }
     </style>
 </head>
 <body>
-    <div class="loader-container">
-        <div class="loader"></div>
-        <div class="app-name">MoneyCom</div>
-        <div class="loading-text">Inicializando...</div>
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-    </div>
 
-    <script type="module">
-        // Importa o Firebase
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
+    <!-- Estrutura -->
+    <header>
+        <h1>Exemplo com todas as tags HTML5</h1>
+        <nav>
+            <ul>
+                <li><a href="#texto">Texto</a></li>
+                <li><a href="#multimidia">Multimídia</a></li>
+                <li><a href="#formulario">Formulário</a></li>
+                <li><a href="#tabelas">Tabelas</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        // Configurações do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyA2cvNcKmo4lHz3IqfYNhnmM8URsmy7Ves",
-            authDomain: "financerto-7ff52.firebaseapp.com",
-            projectId: "financerto-7ff52",
-            storageBucket: "financerto-7ff52.appspot.com",
-            messagingSenderId: "120108726325",
-            appId: "1:120108726325:web:f0b4d64c44da47f7e0597c",
-            measurementId: "G-4BCMRV8S9L"
-        };
+    <main>
+        <section id="texto">
+            <h2>Tags de Texto e Estrutura</h2>
+            <article>
+                <p>Este é um parágrafo de exemplo utilizando a tag <code>&lt;p&gt;</code>.</p>
+                <blockquote>Citação: "O HTML é incrível!"</blockquote>
+                <cite>— Autor desconhecido</cite>
+                <h3>Títulos</h3>
+                <h1>Título 1</h1>
+                <h2>Título 2</h2>
+                <h3>Título 3</h3>
+                <h4>Título 4</h4>
+                <h5>Título 5</h5>
+                <h6>Título 6</h6>
 
-        // Inicializa o Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+                <ul>
+                    <li>Item de lista não ordenada</li>
+                    <li>Outro item de lista não ordenada</li>
+                </ul>
 
-        const progressBar = document.querySelector('.progress');
-        const loadingText = document.querySelector('.loading-text');
-        const totalTime = 7000; // 7 segundos
-        const updateInterval = 50; // Atualiza a cada 50ms
-        let currentProgress = 0;
+                <ol>
+                    <li>Item de lista ordenada</li>
+                    <li>Outro item de lista ordenada</li>
+                </ol>
 
-        function updateProgress() {
-            currentProgress += (updateInterval / totalTime) * 100;
-            if (currentProgress >= 100) {
-                currentProgress = 100;
-                loadingText.textContent = 'Carregamento concluído!';
-                checkUserAuthentication();
-            } else {
-                progressBar.style.width = `${currentProgress}%`;
-                loadingText.textContent = `Carregando... ${Math.round(currentProgress)}%`;
-                setTimeout(updateProgress, updateInterval);
-            }
-        }
+                <dl>
+                    <dt>HTML</dt>
+                    <dd>Linguagem de Marcação de Hipertexto</dd>
+                    <dt>CSS</dt>
+                    <dd>Folhas de Estilo em Cascata</dd>
+                </dl>
 
-        // Verifica se o usuário está autenticado
-        function checkUserAuthentication() {
-            onAuthStateChanged(auth, user => {
-                if (user) {
-                    // Usuário logado, redireciona para site.html
-                    setTimeout(() => { 
-                        window.location.href = 'site.html'; 
-                    }, 500);
-                } else {
-                    // Usuário não logado, redireciona para auth.html
-                    setTimeout(() => { 
-                        window.location.href = 'auth.html'; 
-                    }, 500);
-                }
-            });
-        }
+                <mark>Este texto está marcado</mark>
+                <strong>Texto em negrito forte</strong>
+                <em>Texto em itálico enfático</em>
+                <br>
+                <hr>
+                <code>&lt;Este é um código HTML&gt;</code>
 
-        // Inicia o progresso após um pequeno delay para permitir que as animações iniciais ocorram
-        setTimeout(updateProgress, 500);
-    </script>
+                <pre>
+    function exemplo() {
+        return "Este é um bloco de código";
+    }
+                </pre>
+            </article>
+        </section>
+
+        <section id="multimidia">
+            <h2>Tags de Multimídia</h2>
+            <img src="https://via.placeholder.com/150" alt="Imagem de exemplo">
+            
+            <figure>
+                <img src="https://via.placeholder.com/300" alt="Imagem de exemplo 2">
+                <figcaption>Esta é uma legenda da imagem acima</figcaption>
+            </figure>
+
+            <audio controls>
+                <source src="audio.mp3" type="audio/mpeg">
+                Seu navegador não suporta a tag de áudio.
+            </audio>
+
+            <video width="320" height="240" controls>
+                <source src="video.mp4" type="video/mp4">
+                Seu navegador não suporta a tag de vídeo.
+            </video>
+        </section>
+
+        <section id="formulario">
+            <h2>Tags de Formulário</h2>
+            <form action="/submit" method="post">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome"><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email"><br><br>
+
+                <label for="mensagem">Mensagem:</label>
+                <textarea id="mensagem" name="mensagem"></textarea><br><br>
+
+                <fieldset>
+                    <legend>Opções:</legend>
+                    <input type="checkbox" id="opcao1" name="opcao1" value="opcao1">
+                    <label for="opcao1">Opção 1</label><br>
+                    
+                    <input type="radio" id="opcao2" name="opcoes" value="opcao2">
+                    <label for="opcao2">Opção 2</label><br>
+                </fieldset>
+
+                <label for="arquivo">Selecione um arquivo:</label>
+                <input type="file" id="arquivo" name="arquivo"><br><br>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+
+        <section id="tabelas">
+            <h2>Tabelas</h2>
+            <table border="1">
+                <caption>Exemplo de Tabela</caption>
+                <thead>
+                    <tr>
+                        <th>Coluna 1</th>
+                        <th>Coluna 2</th>
+                        <th>Coluna 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Linha 1, Coluna 1</td>
+                        <td>Linha 1, Coluna 2</td>
+                        <td>Linha 1, Coluna 3</td>
+                    </tr>
+                    <tr>
+                        <td>Linha 2, Coluna 1</td>
+                        <td>Linha 2, Coluna 2</td>
+                        <td>Linha 2, Coluna 3</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Rodapé 1</td>
+                        <td>Rodapé 2</td>
+                        <td>Rodapé 3</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Exemplo com todas as tags HTML5</p>
+    </footer>
+
 </body>
 </html>
