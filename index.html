@@ -1,78 +1,229 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gráfico Interativo</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Professional Data Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #chartContainer {
-            width: 100%;
-            max-width: 600px;
-            margin: auto;
-        }
-        input {
-            margin: 5px 0;
-            width: 100%;
-        }
+        /* Custom CSS Styles */
+
+/* Global styles */
+body {
+    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Container for overall layout */
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styling */
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+/* Section headers */
+h2 {
+    font-size: 1.8rem;
+    color: #495057;
+    margin-top: 20px;
+}
+
+/* Textarea styles */
+textarea#textEditor {
+    background-color: #f9f9f9;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    color: #495057;
+}
+
+/* Table styles */
+table#dataTable {
+    background-color: #ffffff;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #dee2e6;
+}
+
+table#dataTable th, table#dataTable td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+table#dataTable th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+table#dataTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Button styles */
+button.btn {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+button.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: white;
+}
+
+button.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+button.btn-success {
+    background-color: #28a745;
+    border: none;
+    color: white;
+}
+
+button.btn-success:hover {
+    background-color: #218838;
+}
+
+button.btn-warning {
+    background-color: #ffc107;
+    border: none;
+    color: black;
+}
+
+button.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+/* Chart canvas styling */
+canvas {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-top: 10px;
+}
     </style>
 </head>
 <body>
-    <h1>Gráfico Interativo</h1>
-    <div>
-        <label for="category">Categoria:</label>
-        <input type="text" id="category" placeholder="Digite o nome da categoria">
-        <label for="percentage">Porcentagem:</label>
-        <input type="number" id="percentage" placeholder="Digite a porcentagem" min="0" max="100">
-        <button onclick="addData()">Adicionar Dados</button>
-    </div>
+    <div class="container mt-4">
+        <h1>Data Management System</h1>
 
-    <div id="chartContainer">
-        <canvas id="myChart"></canvas>
+        <!-- Section for Creating and Editing Texts -->
+        <section>
+            <h2>Create and Edit Text</h2>
+            <textarea id="textEditor" class="form-control" rows="5" placeholder="Type your text here..."></textarea>
+            <button class="btn btn-primary mt-2" onclick="downloadText()">Download Text</button>
+        </section>
+
+        <hr>
+
+        <!-- Section for Creating, Viewing, and Downloading Tables -->
+        <section>
+            <h2>Create and Download Table</h2>
+            <table id="dataTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                        <th>Column 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-success" onclick="downloadTable()">Download Table (Excel)</button>
+        </section>
+
+        <hr>
+
+        <!-- Section for Creating Charts -->
+        <section>
+            <h2>Create Charts</h2>
+            <canvas id="myChart" width="400" height="200"></canvas>
+            <button class="btn btn-warning mt-2" onclick="downloadChart()">Download Chart</button>
+        </section>
     </div>
 
     <script>
+        // Function to download text as a .txt file
+        function downloadText() {
+            const text = document.getElementById("textEditor").value;
+            const blob = new Blob([text], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "text.txt";
+            link.click();
+        }
+
+        // Function to download table as an Excel file
+        function downloadTable() {
+            let table = document.getElementById("dataTable");
+            let workbook = XLSX.utils.table_to_book(table);
+            XLSX.writeFile(workbook, "table.xlsx");
+        }
+
+        // Function to create and download chart
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: [],
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: 'Porcentagem',
-                    data: [],
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
                     borderWidth: 1
                 }]
             },
             options: {
                 scales: {
                     y: {
-                        beginAtZero: true,
-                        max: 100
+                        beginAtZero: true
                     }
                 }
             }
         });
 
-        function addData() {
-            const category = document.getElementById('category').value;
-            const percentage = document.getElementById('percentage').value;
-
-            if (category && percentage) {
-                myChart.data.labels.push(category);
-                myChart.data.datasets[0].data.push(percentage);
-                myChart.update();
-
-                document.getElementById('category').value = '';
-                document.getElementById('percentage').value = '';
-            } else {
-                alert('Por favor, preencha ambos os campos!');
-            }
+        function downloadChart() {
+            const link = document.createElement('a');
+            link.href = document.getElementById('myChart').toDataURL('image/png');
+            link.download = 'chart.png';
+            link.click();
         }
     </script>
 </body>
